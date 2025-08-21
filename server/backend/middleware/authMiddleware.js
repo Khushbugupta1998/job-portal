@@ -15,7 +15,11 @@ export const protect = async (req, res, next) => {
         }
 
         const decode = jwt.verify(token, process.env.JWT_SECRET)
-        req.user = User.findById(decode.id).select('-password')
+        // req.user = User.findById(decode.id).select('-password')
+        req.user = {
+            id: decode.id,
+            role: decode.role
+        };
         next()
 
     } catch (error) {
@@ -25,14 +29,13 @@ export const protect = async (req, res, next) => {
 
 
 export const authorizeRoles = (...allowedRoles) => {
-    console.log(allowedRoles, 'allowed')
     return (req, res, next) => {
         if (!req.user || !req.user.role) {
             return res.status(401).json({ message: 'Not authorized' })
         }
 
-        if(!allowedRoles.includes(req.user.role)){
-            return res.status(403).json({message:'Forbidden: insufficient Role'})
+        if (!allowedRoles.includes(req.user.role)) {
+            return res.status(403).json({ message: 'Forbidden: insufficient Role' })
         }
 
         next()

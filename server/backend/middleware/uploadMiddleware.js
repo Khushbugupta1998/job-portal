@@ -2,7 +2,7 @@ import multer from 'multer'
 import path from 'path'
 import fs from 'fs'
 
-const resumesDir = path.resolve('server/backend/uploads/resumes')
+const resumesDir = path.resolve('uploads/resumes')
 fs.mkdirSync(resumesDir, {recursive: true})
 
 const storage = multer.diskStorage({
@@ -26,4 +26,4 @@ if(allowed.includes(file.mimetype)) cb(null, true)
   else cb(new Error('Only PDF, DOC, DOCX allowed'));
 }
 
-export const resumeUpload = multer({storage, fileFilter}).single('resume')
+export const resumeUpload = multer({storage, fileFilter}).single('file')
